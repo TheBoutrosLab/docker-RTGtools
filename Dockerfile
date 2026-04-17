@@ -7,7 +7,7 @@ FROM condaforge/miniforge3:${MINIFORGE_VERSION} AS builder
 ARG CONDA_ENV_PATH
 ARG RTGTOOLS_VERSION=3.13
 
-# Use conda to install tools and dependencies into the configured environment path
+# Use mamba to install tools and dependencies into the configured environment path
 RUN mamba create -qy -p ${CONDA_ENV_PATH} \
     -c bioconda \
     -c conda-forge \
