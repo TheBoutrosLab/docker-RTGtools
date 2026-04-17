@@ -1,10 +1,2 @@
 ---
-category: 'docker'
-description: 'Dockerfile for RTG-tools'
-maintainers: ['jsahrmann@mednet.ucla.edu']
-languages: ['Dockerfile']
-tools: ['RTG-tools']
-version: ['3.12.1']
-purpose: 'Utilities for accurate VCF comparison and manipulation'
-references: 'https://www.realtimegenomics.com/products/rtg-tools'
 image_name: 'rtg-tools'
