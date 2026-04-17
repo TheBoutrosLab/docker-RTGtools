@@ -1,26 +1,35 @@
-ARG MINIFORGE_VERSION=23.3.1-1
-ARG UBUNTU_VERSION=23.04
+ARG MINIFORGE_VERSION=26.1.1-2
+ARG UBUNTU_VERSION=24.04
+ARG CONDA_ENV_PATH=/opt/conda/envs/rtg-tools
 
-FROM condaforge/mambaforge:${MINIFORGE_VERSION} AS builder
+FROM condaforge/miniforge3:${MINIFORGE_VERSION} AS builder
 
-# Use conda to install tools and dependencies into /usr/local
-ARG RTGTOOLS_VERSION=3.12.1
-RUN conda create -qy -p /usr/local \
+ARG CONDA_ENV_PATH
+ARG RTGTOOLS_VERSION=3.13
+
+# Use conda to install tools and dependencies into the configured environment path
+RUN mamba create -qy -p ${CONDA_ENV_PATH} \
     -c bioconda \
     -c conda-forge \
-    rtg-tools==${RTGTOOLS_VERSION}
+    rtg-tools==${RTGTOOLS_VERSION} && \
+    mamba clean -afy
 
-# Deploy the target tools into a base image
 FROM ubuntu:${UBUNTU_VERSION} AS final
-COPY --from=builder /usr/local /usr/local
+
+ARG CONDA_ENV_PATH
+
+COPY --from=builder ${CONDA_ENV_PATH} ${CONDA_ENV_PATH}
+
+ENV CONDA_ENV_PATH="${CONDA_ENV_PATH}" \
+    PATH="${CONDA_ENV_PATH}/bin:${PATH}"
 
 # Add a new user/group called bldocker
 RUN groupadd -g 500001 bldocker && \
-    useradd -r -u 500001 -g bldocker bldocker
+    useradd -m -r -u 500001 -g bldocker bldocker
 
 # Change the default user to bldocker from root
 USER bldocker
 
-LABEL maintainer="John Sahrmann <jsahrmann@mednet.ucla.edu>" \
-      org.opencontainers.image.source=https://github.com/uclahs-cds/docker-RTGtools
-
+LABEL maintainer="Yash Patel <ypatel@sbpdiscovery.org>" \
+      org.opencontainers.image.source=https://github.com/TheBoutrosLab/docker-RTGtools \
+      org.opencontainers.image.description="Dockerfile for RTG-tools"
