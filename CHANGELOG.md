@@ -10,6 +10,14 @@ This project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.htm
 ## [Unreleased]
 
 ---
+## [3.13] - 2026-04-17
+### Changed
+- Update RTG-tools `v3.12.1` to `v3.13`
+- Update Miniforge version to `v26.1.1-2`
+- Update Ubuntu version to `v24.04`
+- Replace `condaforge/mambaforge` with `condaforge/miniforge3`
+
+---
 
 ## [3.12.1] - 2024-04-16
 ### Added
